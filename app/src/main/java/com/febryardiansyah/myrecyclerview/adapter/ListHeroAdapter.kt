@@ -12,6 +12,15 @@ import com.febryardiansyah.myrecyclerview.R
 import com.febryardiansyah.myrecyclerview.models.HeroModel
 
 class ListHeroAdapter(private val listHero:ArrayList<HeroModel>) : RecyclerView.Adapter<ListHeroAdapter.ListViewHolder>() {
+    private lateinit var onItemClickCallBack:OnItemClickCallBack
+
+    interface OnItemClickCallBack {
+        fun onItemClicked(data:HeroModel)
+    }
+
+    fun setOnItemClickedCallBack(onItemClickCallBack: OnItemClickCallBack){
+        this.onItemClickCallBack = onItemClickCallBack
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view:View = LayoutInflater.from(parent.context).inflate(R.layout.item_row_hero,parent,false)
@@ -26,6 +35,9 @@ class ListHeroAdapter(private val listHero:ArrayList<HeroModel>) : RecyclerView.
                 .into(holder.imgPhoto)
         holder.tvName.text = hero.name
         holder.tvDetail.text = hero.detail
+        holder.itemView.setOnClickListener {
+            onItemClickCallBack.onItemClicked(listHero[holder.adapterPosition])
+        }
     }
 
     override fun getItemCount(): Int {

@@ -11,6 +11,15 @@ import com.febryardiansyah.myrecyclerview.R
 import com.febryardiansyah.myrecyclerview.models.HeroModel
 
 class GridHeroAdapter(val listHero:ArrayList<HeroModel>) : RecyclerView.Adapter<GridHeroAdapter.GridViewHolder>() {
+    private lateinit var onItemClickedCallback:OnItemClickedCallback
+
+    interface OnItemClickedCallback {
+        fun onItemClicked(data:HeroModel)
+    }
+
+    fun setOnClickCallBack(onItemClickedCallback: OnItemClickedCallback){
+        this.onItemClickedCallback = onItemClickedCallback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridHeroAdapter.GridViewHolder {
         val view:View = LayoutInflater.from(parent.context).inflate(R.layout.item_grid_hero,parent,false)
@@ -22,6 +31,10 @@ class GridHeroAdapter(val listHero:ArrayList<HeroModel>) : RecyclerView.Adapter<
                 .load(listHero[position].photo)
                 .apply(RequestOptions().override(350,350))
                 .into(holder.imgPhoto)
+
+        holder.itemView.setOnClickListener {
+            onItemClickedCallback.onItemClicked(listHero[holder.adapterPosition])
+        }
     }
 
     override fun getItemCount(): Int {
